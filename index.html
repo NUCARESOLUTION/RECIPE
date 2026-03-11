@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>연하퍼펙트 레시피북</title>
+  <meta name="description" content="PDF 페이지 이미지를 그대로 활용한 연하퍼펙트 레시피북 웹사이트" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f4f6f3;
+      --bg2:#eef2ed;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#667085;
+      --line:rgba(31,41,55,.08);
+      --brand:#2f5d34;
+      --brand2:#4e8a57;
+      --shadow:0 16px 40px rgba(15,23,42,.10);
+      --shadow-sm:0 8px 20px rgba(15,23,42,.08);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Noto Sans KR",system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(78,138,87,.12), transparent 24%),
+        linear-gradient(180deg, #f8faf7 0%, var(--bg) 45%, var(--bg2) 100%);
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .wrap{
+      width:min(1100px, calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .hero{
+      padding:56px 0 30px;
+    }
+
+    .hero-box{
+      background:rgba(255,255,255,.8);
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:34px 28px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:24px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      margin:0 0 10px;
+      color:var(--brand);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.14em;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(30px,4vw,54px);
+      line-height:1.15;
+      letter-spacing:-0.03em;
+    }
+
+    .hero p{
+      margin:16px 0 0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.7;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:28px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:48px;
+      padding:0 18px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:700;
+      box-shadow:var(--shadow-sm);
+      transition:.18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg, var(--brand), var(--brand2));
+      color:#fff;
+      border:none;
+    }
+
+    .hero-preview{
+      background:linear-gradient(180deg,#fff,#f6f8f5);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow-sm);
+    }
+
+    .hero-preview img{
+      display:block;
+      width:100%;
+      border-radius:18px;
+      box-shadow:0 10px 22px rgba(0,0,0,.10);
+    }
+
+    .sticky-bar{
+      position:sticky;
+      top:0;
+      z-index:30;
+      backdrop-filter:blur(12px);
+      background:rgba(244,246,243,.78);
+      border-top:1px solid rgba(255,255,255,.7);
+      border-bottom:1px solid var(--line);
+    }
+
+    .sticky-inner{
+      width:min(1100px, calc(100% - 32px));
+      margin:0 auto;
+      padding:12px 0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-warp:warp
+    }
+
+    .tool-btn, .tool-select{
+      min-height:44px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:0 16px;
+      font:inherit;
+      box-shadow:var(--shadow-sm);
+    }
+
+    .tool-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:0 16px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      font:inherit;
+      font-weight:700;
+      line-height:1;
+      vertical-align:middle;
+      box-shadow:var(--shadow-sm);
+      cursor:pointer;
+      text-decoration:none;
+    }
+
+    .tool-btn:disabled{
+      opacity:.4;
+      cursor:not-allowed;
+    }
+
+    .tool-select{
+      min-width:140px;
+      outline:none;
+    }
+
+    .tool-spacer{
+      flex:1;
+    }
+
+    .viewer{
+      padding:28px 0 80px;
+    }
+
+    .viewer-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .viewer-head h2{
+      margin:0;
+      font-size:24px;
+      letter-spacing:-0.02em;
+    }
+
+    .viewer-head p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .status{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .pages{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:28px;
+    }
+
+    .page{
+      scroll-margin-top:88px;
+    }
+
+    .page-label{
+      margin:0 0 10px;
+      color:var(--brand);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.14em;
+    }
+
+    .page-card{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.75);
+      border-radius:28px;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+
+    .page-card img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:20px;
+      background:#fff;
+    }
+
+    .single-mode .page{
+      display:none;
+    }
+
+    .single-mode .page.active{
+      display:block;
+    }
+
+    .floating-top{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:52px;
+      height:52px;
+      border:none;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--brand), var(--brand2));
+      color:#fff;
+      font-size:18px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+      z-index:40;
+    }
+
+    .footer{
+      padding:0 0 42px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    @media (max-width: 860px){
+      .hero-box{
+        grid-template-columns:1fr;
+      }
+
+      .sticky-inner{
+        justify-content:center;
+      }
+
+      .tool-spacer{
+        display:none;
+      }
+
+      .viewer-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+
+    @media (max-width: 540px){
+      .wrap,
+      .sticky-inner{
+        width:min(100% - 20px, 1100px);
+      }
+
+      .hero{
+        padding-top:24px;
+      }
+
+      .hero-box{
+        padding:22px 18px;
+        border-radius:24px;
+      }
+
+      .btn,
+      .tool-btn,
+      .tool-select{
+        width:100%;
+      }
+
+      .hero-actions{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="wrap">
+      <div class="hero-box">
+        <div>
+          <span class="eyebrow">DYSPHAGIA RECIPE BOOK</span>
+          <h1>뉴케어 연하퍼펙트 레시피북</h1>
+          <p>
+            이 책은 연하식을 만드는 병원 관계자의 이해를 돕기 위한 안내서 입니다.
+            사진과 레시피는 대상웰라이프(주)의 동의 없이는 임의로 활용할 수 없습니다.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#viewer">레시피북 보기</a>
+            <a
+              class="btn"
+              href="./260306%20%EC%97%B0%ED%95%98%EC%8B%9D%20%EB%A0%88%EC%8B%9C%ED%94%BC%EB%B6%81%20%EB%B3%B8%EB%AC%B8%20E%EB%B6%81.pdf"
+              download
+            >
+              레시피북 PDF 다운
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-preview">
+          <img src="assets/pages/page1.png" alt="연하퍼펙트 레시피북 표지 미리보기">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="sticky-bar">
+    <div class="sticky-inner">
+      <button type="button" class="tool-btn" id="prevBtn">이전</button>
+
+      <select id="pageSelect" class="tool-select" aria-label="페이지 선택"></select>
+
+      <button type="button" class="tool-btn" id="nextBtn">다음</button>
+
+      <button type="button" class="tool-btn" id="toggleBtn">한 장씩 보기</button>
+
+      <a
+        class="tool-btn"
+        href="./260306%20%EC%97%B0%ED%95%98%EC%8B%9D%20%EB%A0%88%EC%8B%9C%ED%94%BC%EB%B6%81%20%EB%B3%B8%EB%AC%B8%20E%EB%B6%81.pdf"
+        download
+      >
+        연하퍼펙트 레시피북 PDF 다운
+      </a>
+    </div>
+  </div>
+
+  <main class="viewer" id="viewer">
+    <div class="wrap">
+      <div class="viewer-head">
+        <div>
+          <h2>레시피북 보기</h2>
+          <p>페이지 이미지를 그대로 사용합니다.</p>
+        </div>
+        <div class="status" id="statusText">총 30페이지</div>
+      </div>
+
+      <section class="pages" id="pages"></section>
+    </div>
+  </main>
+
+  <button class="floating-top" id="topBtn" aria-label="맨 위로">↑</button>
+
+  <footer class="footer">
+    뉴케어 연하퍼펙트로 먹고 마시는 행복 레시피
+  </footer>
+
+  <script>
+    const totalPages = 30;
+    const pagesWrap = document.getElementById("pages");
+    const pageSelect = document.getElementById("pageSelect");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const statusText = document.getElementById("statusText");
+    const topBtn = document.getElementById("topBtn");
+
+    let currentPage = 1;
+    let singleMode = false;
+
+    function buildPages() {
+      let html = "";
+      let options = "";
+
+      for (let i = 1; i <= totalPages; i++) {
+        html += `
+          <article class="page" id="page${i}" data-page="${i}">
+            <p class="page-label">PAGE ${i}</p>
+            <div class="page-card">
+              <img src="assets/pages/page${i}.png" alt="연하퍼펙트 레시피북 ${i}페이지" loading="${i <= 3 ? "eager" : "lazy"}">
+            </div>
+          </article>
+        `;
+        options += `<option value="${i}">${i}페이지</option>`;
+      }
+
+      pagesWrap.innerHTML = html;
+      pageSelect.innerHTML = options;
+    }
+
+    function getPages() {
+      return Array.from(document.querySelectorAll(".page"));
+    }
+
+    function updateControls() {
+      pageSelect.value = String(currentPage);
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+      statusText.textContent = `현재 ${currentPage} / 총 ${totalPages}페이지`;
+    }
+
+    function updateSingleMode() {
+      const pages = getPages();
+
+      if (!singleMode) {
+        pagesWrap.classList.remove("single-mode");
+        pages.forEach(page => page.classList.remove("active"));
+        toggleBtn.textContent = "한 장씩 보기";
+        updateControls();
+        return;
+      }
+
+      pagesWrap.classList.add("single-mode");
+      pages.forEach((page, idx) => {
+        page.classList.toggle("active", idx + 1 === currentPage);
+      });
+      toggleBtn.textContent = "전체 펼쳐보기";
+      updateControls();
+    }
+
+    function goToPage(pageNum, smooth = true) {
+      currentPage = Math.max(1, Math.min(totalPages, pageNum));
+      updateSingleMode();
+
+      const target = document.getElementById(`page${currentPage}`);
+      if (target) {
+        target.scrollIntoView({
+          behavior: smooth ? "smooth" : "auto",
+          block: "start"
+        });
+      }
+    }
+
+    pageSelect.addEventListener("change", (e) => {
+      goToPage(parseInt(e.target.value, 10), true);
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) goToPage(currentPage - 1, true);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentPage < totalPages) goToPage(currentPage + 1, true);
+    });
+
+    toggleBtn.addEventListener("click", () => {
+      singleMode = !singleMode;
+      updateSingleMode();
+      goToPage(currentPage, false);
+    });
+
+    topBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    buildPages();
+    updateSingleMode();
+    updateControls();
+
+    const observer = new IntersectionObserver((entries) => {
+      if (singleMode) return;
+
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (visible) {
+        currentPage = parseInt(visible.target.dataset.page, 10);
+        updateControls();
+      }
+    }, {
+      threshold: [0.3, 0.5, 0.7, 0.9]
+    });
+
+    getPages().forEach(page => observer.observe(page));
+  </script>
+</body>
+</html>
